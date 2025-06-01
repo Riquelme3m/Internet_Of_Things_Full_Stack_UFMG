@@ -1,0 +1,27 @@
+{
+  "name": "iot_project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Riquelme3m/Internet_Of_Things_Full_Stack_UFMG.git"
+  },
+  "author": "Riquelme",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Riquelme3m/Internet_Of_Things_Full_Stack_UFMG/issues"
+  },
+  "homepage": "https://github.com/Riquelme3m/Internet_Of_Things_Full_Stack_UFMG#readme",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "http": "^0.0.1-security",
+    "mqtt": "^5.13.0",
+    "pg": "^8.16.0",
+    "socket.io": "^4.8.1"
+  }
+}
