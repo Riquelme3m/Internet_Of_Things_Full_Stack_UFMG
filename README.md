@@ -8,7 +8,7 @@ This project implements a complete IoT solution using the **ESP32 microcontrolle
 ## 📊 System Architecture
 
 <!-- Replace this line with your diagram -->
-![System Architecture](documents/diagramArchitecture.png)
+![System Architecture](documents/architectureDiagram.png)
 
 ---
 
