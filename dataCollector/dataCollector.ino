@@ -28,7 +28,7 @@ const char* sensorHumidityDataType = "Humidity";
 const char *alarmLedDataType = "ON/OFF";
 const char* servoMotorDataType = "ON/OFF";
 
-// --- Global Objects ---
+// --- Global Objects -
 WiFiClient espClient;
 PubSubClient client(espClient);
 DHT dht(tempHumiditySensor, DHT11);
