@@ -37,7 +37,7 @@ Servo myServo;
 // --- Timing Control ---
 unsigned long lastSensorRead = 0;
 unsigned long lastStatePublish = 0;
-const unsigned long sensorInterval = 500;
+const unsigned long sensorInterval = 5000;
 const unsigned long stateInterval = 500;
 
 // --- State ---
@@ -142,6 +142,7 @@ void setup_wifi() {
 }
 
 // --- MQTT: Callback to Receive Temperature Threshold ---
+
 void mqttCallback(char* topic, byte* payload, unsigned int length) {
   String message;
   for (unsigned int i = 0; i < length; i++) {
@@ -152,26 +153,29 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
   Serial.print(": ");
   Serial.println(message);
 
-  String topicStr = String(topic);
-
-  if (topicStr == "esp/temp_threshold") {
+  // Use strcmp for topic comparison
+  if (strcmp(topic, "esp/temp_threshold") == 0) {
     temperatureThreshold = message.toFloat();
     Serial.print("Updated temperature threshold to: ");
     Serial.println(temperatureThreshold);
   } 
-  else if (topicStr == "esp/servo_control") {
-    // Assuming you send "ON" or "OFF"
+  else if (strcmp(topic, "esp/servo_control") == 0) {
     if (message.equalsIgnoreCase("ON")) {
-      myServo.write(180);  // Turn servo ON
+      myServo.write(180);
       Serial.println("Servo turned ON via MQTT");
     } 
     else if (message.equalsIgnoreCase("OFF")) {
-      myServo.write(0);    // Turn servo OFF
+      myServo.write(0);
       Serial.println("Servo turned OFF via MQTT");
     }
   }
 }
+// ...existing code...
 
+
+// --- MQTT: Reconnect if Needed ---
+// Add a global flag at the top of your file:
+bool initialInfoPublished = false;
 
 // --- MQTT: Reconnect if Needed ---
 void reconnect() {
@@ -182,7 +186,10 @@ void reconnect() {
       client.subscribe("esp/temp_threshold");
       client.subscribe("esp/servo_control");
       Serial.println("SUbscribed");
-      
+      if (!initialInfoPublished) {
+        publishInitialSensorInfo();
+        initialInfoPublished = true;
+      }
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
@@ -192,7 +199,6 @@ void reconnect() {
   }
 }
 
-// --- Setup ---
 void setup() {
   Serial.begin(115200);
   setup_wifi();
@@ -203,8 +209,9 @@ void setup() {
   myServo.attach(servoPin);
 
   client.setServer(mqtt_server, 1883);
+  client.setKeepAlive(60);
   client.setCallback(mqttCallback);
-  publishInitialSensorInfo();
+  
 }
 
 // --- Main Loop ---
@@ -232,10 +239,10 @@ void loop() {
       Serial.println(temperatureThreshold);
       if (temp > temperatureThreshold) {
         digitalWrite(alarmLED, HIGH);
-        myServo.write(180);
+        
       } else {
         digitalWrite(alarmLED, LOW);
-        myServo.write(0);
+        
       }
     }
   }
