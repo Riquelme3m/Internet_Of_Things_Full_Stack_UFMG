@@ -12,9 +12,9 @@ const int servoPin = 27;
 const int tempHumiditySensor = 26;
 
 // --- WiFi & MQTT Configuration ---
-const char* ssid = "REPUBLICA.2G";
-const char* pswrd = "doa49jtn";
-const char* mqtt_server = "192.168.0.4";
+const char* ssid = "Iphone de Thalys";
+const char* pswrd = "12345678";
+const char* mqtt_server = "200.238.239.146";
 
 // --- Sensor and Actuator Metadata ---
 const char* machine_id = "ESP32_01";
